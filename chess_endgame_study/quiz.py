@@ -11,7 +11,7 @@ from typing import List, Optional
 
 from .endgames import EndgamePosition, list_endgames
 from .fen import FENPosition, parse_fen
-from .progress import PositionProgress, ProgressStore
+from .progress import ProgressStore
 
 PIECE_SYMBOLS = {
     "K": "\u2654",
@@ -60,17 +60,18 @@ def select_positions(
 ) -> List[EndgamePosition]:
     """Pick positions to quiz, prioritizing unmastered and weak ones."""
     all_positions = list_endgames()
-    progress = store.all_progress()
 
     def sort_key(pos: EndgamePosition):
-        prog = progress.get(pos.fen)
+        prog = store.get(pos.fen)
         if prog is None:
             return (0, 0.0, 0)  # never studied: highest priority
-        mastered = 0 if prog.mastered else 1
         # Lower accuracy and fewer attempts first.
-        return (mastered, prog.accuracy, prog.attempts)
+        return (1, prog.accuracy, prog.attempts)
 
-    unmastered = [p for p in all_positions if not progress.get(p.fen, PositionProgress(p.fen, p.name)).mastered]
+    unmastered = [
+        p for p in all_positions if store.get(p.fen) is None
+        or not store.get(p.fen).mastered
+    ]
     pool = unmastered if unmastered else all_positions
     if not include_mastered and unmastered:
         pool = unmastered

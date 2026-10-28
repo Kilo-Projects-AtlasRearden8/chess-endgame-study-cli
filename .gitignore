@@ -1,45 +1,45 @@
+
 # Byte-compiled / optimized
-__pycache__/
-*.py[cod]
-*$py.class
-
 # C extensions
-*.so
-
 # Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# Virtual environments
-venv/
-.env
-.venv
-
 # Editor / IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
-
 # Local runtime data (user-specific, not source)
+# OS
+# Virtual environments
+*$py.class
+*.egg
+*.egg-info/
+*.py[cod]
+*.pyc
+*.so
+*.swo
+*.swp
+*~
+.DS_Store
+.Python
+.eggs/
+.env
+.env.*
+.idea/
+.installed.cfg
+.venv
+.venv/
+.vscode/
+MANIFEST
+Thumbs.db
+__pycache__/
+build/
 chess_endgame_study_progress.json
 chess_endgame_study_progress.json.tmp
+develop-eggs/
+dist/
+dist/*.tmp
+downloads/
+eggs/
+node_modules/
+parts/
+sdist/
+share/python-wheels/
+var/
+venv/
+wheels/

@@ -26,6 +26,7 @@ class PositionProgress:
     correct: int = 0
     incorrect: int = 0
     mastered: bool = False
+    streak: int = 0
     last_attempt: Optional[str] = None
 
     @property
@@ -46,6 +47,7 @@ class PositionProgress:
             correct=int(data.get("correct", 0)),
             incorrect=int(data.get("incorrect", 0)),
             mastered=bool(data.get("mastered", False)),
+            streak=int(data.get("streak", 0)),
             last_attempt=data.get("last_attempt"),
         )
 
@@ -108,10 +110,15 @@ class ProgressStore:
         else:
             progress.incorrect += 1
         progress.last_attempt = datetime.now(timezone.utc).isoformat()
-        # Mastered after 3 correct in a row with at least 3 attempts.
-        if progress.attempts >= 3 and progress.correct >= 3 and progress.incorrect == 0:
-            progress.mastered = True
-        elif progress.incorrect > 0 and progress.correct < progress.attempts:
+        # Mastery: three correct answers in a row. One wrong answer resets
+        # the streak and un-masters, but the position can be re-mastered
+        # with another three-in-a-row run.
+        if correct:
+            progress.streak += 1
+            if progress.streak >= 3:
+                progress.mastered = True
+        else:
+            progress.streak = 0
             progress.mastered = False
         self._positions[self._key(fen)] = progress
         self._save()
